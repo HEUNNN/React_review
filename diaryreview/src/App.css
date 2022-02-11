@@ -1,0 +1,35 @@
+.DiaryEditor {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.DiaryEditor h2 {
+  width: 310px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: rgb(252, 252, 156);
+  margin-bottom: 5px;
+  border-radius: 0.8rem;
+}
+.DiaryEditor input {
+  width: 300px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+.DiaryEditor textarea {
+  width: 300px;
+  height: 150px;
+  margin-bottom: 5px;
+}
+.DiaryEditor select {
+  width: 50px;
+  text-align: center;
+  margin: 10px;
+  padding-bottom: 2px;
+}
+.DiaryEditor button {
+  width: 100px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
