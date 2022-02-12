@@ -1,17 +1,19 @@
 import { useRef, useState } from "react";
-const DiaryEditor = () => {
+const DiaryEditor = ({ onCreateLst }) => {
   const [state, setState] = useState({
+    //useState를 사용하기 위한 선언(정의)
     author: "",
     content: "",
     emotion: 1,
   });
-  const handleSate = (e) => {
+  const handleState = (e) => {
     const { name, value } = e.target; //비구조화
     setState({
       ...state,
       [name]: value, //useState({}) 내부의 객체 author, content, emotion 값을 최신화 해줌
     });
   };
+
   const inputAuthor = useRef();
   const textareaContent = useRef();
   const handleSubmit = () => {
@@ -23,7 +25,14 @@ const DiaryEditor = () => {
       return;
     }
     console.log(state);
+    onCreateLst(state.author, state.content, state.emotion);
     alert("저장 성공");
+    setState({
+      //저장 후 다시 초기화
+      author: "",
+      content: "",
+      emotion: "1",
+    });
   };
 
   return (
@@ -33,7 +42,7 @@ const DiaryEditor = () => {
         <input
           name="author"
           value={state.author}
-          onChange={handleSate}
+          onChange={handleState}
           ref={inputAuthor}
         ></input>
       </div>
@@ -41,12 +50,12 @@ const DiaryEditor = () => {
         <textarea
           name="content"
           value={state.content}
-          onChange={handleSate}
+          onChange={handleState}
           ref={textareaContent}
         />
       </div>
       <div>
-        <select name="emotion" value={state.emotion} onChange={handleSate}>
+        <select name="emotion" value={state.emotion} onChange={handleState}>
           <option value={1}>1</option>
           <option value={2}>2</option>
           <option value={3}>3</option>
