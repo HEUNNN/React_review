@@ -1,13 +1,16 @@
-const DiaryItem = ({ elem }) => {
-  console.log("diaryItem test", elem.author);
+const DiaryItem = ({ author, content, created_date, emotion, id }) => {
+  //DiaryList가 렌더링 하는 자식은 DiaryItem component 이다.
   return (
     <div className="DiaryItem">
-      <div className="info">
-        <span>
-          작성자: {elem.author} | 감정 점수: {elem.emotion} {elem.content}{" "}
-          {elem.id} {elem.created_date}
-        </span>
-      </div>
+      <span>
+        작성자: {author} | 감정 점수: {emotion}
+      </span>
+      <span className="data">{new Date(created_date).toLocaleString}</span>
+      {/* new Data()객체에 ms 단위인 created_date를 넣으면 ms 시간을 기준으로 Date() 객체가 생성이 된다.
+          Date() 객체를 생성한 이유는 .toLocaleString을 사용하기 위함 => 사람이 알아보기 좋은 숫자로 변경해줌
+      */}
+      <br />
+      <div className="content">{content}</div>
     </div>
   );
 };
