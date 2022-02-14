@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-const DiaryEditor = ({ onCreateLst }) => {
+const DiaryEditor = ({ onCreate }) => {
   const [state, setState] = useState({
     //useState를 사용하기 위한 선언(정의)
     author: "",
@@ -7,14 +7,13 @@ const DiaryEditor = ({ onCreateLst }) => {
     emotion: 1,
   });
   const handleState = (e) => {
-    const { name, value } = e.target; //비구조화
     setState({
       ...state,
-      [name]: value, //useState({}) 내부의 객체 author, content, emotion 값을 최신화 해줌
+      [e.target.name]: e.target.value, //작성자, 일기 내용 입력창에 입력시 입력창의 변화를 표현하는 코드
     });
   };
 
-  const inputAuthor = useRef();
+  const inputAuthor = useRef(); //DOM요소의 닉네임을 정해주는 것이라고 생각해보기 (=> .getElementById('id'))
   const textareaContent = useRef();
   const handleSubmit = () => {
     if (state.author.length < 1) {
@@ -25,7 +24,9 @@ const DiaryEditor = ({ onCreateLst }) => {
       return;
     }
     console.log(state);
-    onCreateLst(state.author, state.content, state.emotion);
+    onCreate(state.author, state.content, state.emotion);
+    //새로운 일기가 추가되면 App.js의 data 배열에 올리기 위해 App.js로 부터 props 받은 함수를 사용
+    //onCreate()안에는 App.js의 stateDate(), 상태 함수가 들어 있어 data 배열에 new 일기를 추가할 수 있음
     alert("저장 성공");
     setState({
       //저장 후 다시 초기화
