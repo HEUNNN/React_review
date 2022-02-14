@@ -1,4 +1,11 @@
-const DiaryItem = ({ author, content, created_date, emotion, id }) => {
+const DiaryItem = ({
+  author,
+  content,
+  created_date,
+  emotion,
+  id,
+  onDelete,
+}) => {
   //DiaryList가 렌더링 하는 자식은 DiaryItem component 이다.
   return (
     <div className="DiaryItem">
@@ -11,6 +18,15 @@ const DiaryItem = ({ author, content, created_date, emotion, id }) => {
       */}
       <br />
       <div className="content">{content}</div>
+      <button
+        onClick={() => {
+          if (window.confirm(`${id}번째 일기를 정말 삭제하시겠습니까?`)) {
+            onDelete(id); //onDelete에 해당 id를 전달
+          }
+        }}
+      >
+        삭제하기
+      </button>
     </div>
   );
 };
