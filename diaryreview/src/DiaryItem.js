@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+
 const DiaryItem = ({
   author,
   content,
@@ -5,8 +7,41 @@ const DiaryItem = ({
   emotion,
   id,
   onDelete,
+  onEdit,
 }) => {
   //DiaryList가 렌더링 하는 자식은 DiaryItem component 이다.
+  /*가독성을 위해서 return에서 밖으로 빼내어 handleDelete 함수로 선언하여 사용*/
+  const handleDelete = () => {
+    if (window.confirm(`${id}번째 일기를 정말 삭제하시겠습니까?`)) {
+      onDelete(id);
+    }
+  };
+
+  const [isEdit, setIsEdit] = useState(false); //isEdit의 초기 상태를 false로 설정
+  const toggleIsEdit = () => {
+    setIsEdit(!isEdit); //isEdit의 상태값을 반전 시켜서 setIsEdit을 통해 isEdit의 상태를 변경한다. = toggle
+  };
+  //수정 form인 textArea도 DiaryEditor 처럼 글 작성시 textArea에 적용되도록 해주어야 함
+  const [editTextArea, setEditTextArea] = useState(content);
+  const handleEditTextArea = (e) => {
+    setEditTextArea(e.target.value);
+  };
+  const handleQuitEdit = () => {
+    setIsEdit(!isEdit); //수정하다가 수정 취소를 누르면, 수정하던 내용은 없어지고 content 내용만 다시 수정 form에 남는다
+    setEditTextArea(content);
+  };
+  const editTextAreaRef = useRef();
+  const handleEditConfirm = () => {
+    if (editTextArea.length < 5) {
+      editTextAreaRef.current.focus();
+      return;
+    }
+    if (window.confirm(`${id}번째 일기를 수정하시겠습니까?`)) {
+      onEdit(id, editTextArea);
+      setIsEdit(!isEdit);
+      //toggleIsEdit(); 사용해도 똑같은 결과
+    }
+  };
   return (
     <div className="DiaryItem">
       <span>
@@ -17,16 +52,31 @@ const DiaryItem = ({
           Date() 객체를 생성한 이유는 .toLocaleString을 사용하기 위함 => 사람이 알아보기 좋은 숫자로 변경해줌
       */}
       <br />
-      <div className="content">{content}</div>
-      <button
-        onClick={() => {
-          if (window.confirm(`${id}번째 일기를 정말 삭제하시겠습니까?`)) {
-            onDelete(id); //onDelete에 해당 id를 전달
-          }
-        }}
-      >
-        삭제하기
-      </button>
+      <div className="content">
+        {isEdit === false ? (
+          <>{content}</>
+        ) : (
+          <>
+            <textarea
+              value={editTextArea}
+              onChange={handleEditTextArea}
+              ref={editTextAreaRef}
+            />
+          </>
+        )}
+      </div>
+      {isEdit ? (
+        <>
+          <button onClick={handleQuitEdit}>수정 취소</button>
+          <button onClick={handleEditConfirm}>수정 확인</button>
+        </>
+      ) : (
+        <>
+          {" "}
+          <button onClick={handleDelete}>삭제하기</button>
+          <button onClick={toggleIsEdit}>수정하기</button>
+        </>
+      )}
     </div>
   );
 };

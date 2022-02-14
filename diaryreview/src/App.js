@@ -27,10 +27,20 @@ function App() {
     const newDiaryList = data.filter((it) => it.id !== targetId); //targetId에 해당하는 요소를 data에서 제거한 newDiaryList 배열 반환
     setData(newDiaryList); //setData()를 통해 data 상태를 변경(갱신)할 수 있음
   };
+  //무엇을 수정할지 모르고 그저 props해주기 때문에 targetId parameter 필요
+  const onEdit = (targetId, newContent) => {
+    setData(
+      data.map((elem) =>
+        elem.id === targetId ? { ...elem, content: newContent } : elem
+      )
+      //elem.id !== targetId 이면 그냥 elem을 반환,
+      //elem.id === targetId 이면, 수정된 content로 교체된 elem을 setDate()에 전달해주어서 data 상태를 변화시킴
+    );
+  };
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList diaryLst={data} onDelete={onDelete} />
+      <DiaryList diaryLst={data} onDelete={onDelete} onEdit={onEdit} />
     </div>
   );
 }
