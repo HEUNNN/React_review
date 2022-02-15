@@ -44,10 +44,15 @@ const DiaryItem = ({
   };
   return (
     <div className="DiaryItem">
-      <span>
-        작성자: {author} | 감정 점수: {emotion}
-      </span>
-      <span className="data">{new Date(created_date).toLocaleString}</span>
+      <div className="info">
+        <span className="userInfo">
+          작성자: {author} | 감정 점수: {emotion}
+        </span>
+        <br />
+        <span className="date">
+          작성 시간:{new Date(created_date).toLocaleString()}
+        </span>
+      </div>
       {/* new Data()객체에 ms 단위인 created_date를 넣으면 ms 시간을 기준으로 Date() 객체가 생성이 된다.
           Date() 객체를 생성한 이유는 .toLocaleString을 사용하기 위함 => 사람이 알아보기 좋은 숫자로 변경해줌
       */}
