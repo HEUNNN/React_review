@@ -3,12 +3,13 @@ import { useRef, useState } from "react";
 const DiaryItem = ({
   author,
   content,
-  created_date,
   emotion,
+  created_date,
   id,
   onDelete,
   onEdit,
 }) => {
+  //elem을 받아와서 elem은 객체라서 elem.content 등으로 사용해도 됨
   //DiaryList가 렌더링 하는 자식은 DiaryItem component 이다.
   /*가독성을 위해서 return에서 밖으로 빼내어 handleDelete 함수로 선언하여 사용*/
   const handleDelete = () => {
