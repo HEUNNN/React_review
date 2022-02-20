@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
+import LifeCycle from "./LifeCycle";
+import UnmountLifeCycle from "./UnmountLifeCycle";
 
 function App() {
   const [data, setData] = useState([]); //데이터를 관리할 state(최상단에 위치)
@@ -39,6 +41,8 @@ function App() {
   };
   return (
     <div className="App">
+      <LifeCycle />
+      <UnmountLifeCycle />
       <DiaryEditor onCreate={onCreate} />
       <DiaryList data={data} onDelete={onDelete} onEdit={onEdit} />
     </div>
