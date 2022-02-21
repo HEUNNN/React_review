@@ -1,13 +1,32 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import LifeCycle from "./LifeCycle";
-import UnmountLifeCycle from "./UnmountLifeCycle";
 
 function App() {
   const [data, setData] = useState([]); //데이터를 관리할 state(최상단에 위치)
   const dataId = useRef(0); //id 값을 0 으로 정의(초기값)
+
+  //JSON Placeholder에서 데이터를 받아올 것이다. = React에서 API 호출
+  const getData = async () => {
+    //async를 붙여서 getData가 promise 객체를 반환하도록 한다.
+    const res = await fetch(
+      "https://jsonplaceholder.typicode.com/comments"
+    ).then((res) => res.json());
+    const initData = res.slice(0, 20).map((elem) => {
+      return {
+        author: elem.email,
+        content: elem.body,
+        emotion: Math.floor(Math.random() * 5) + 1,
+        created_date: new DataTransfer().getTime(),
+        id: dataId.current++, //return 되니까 후위 연산자 사용
+      };
+    });
+    setData(initData);
+  };
+  useEffect(() => {
+    getData();
+  }, []);
   //기존의 일기 배열에 새로운 일기를 추가하는 함수: onCreate
   const onCreate = (author, content, emotion) => {
     //새로운 데이터를 받아올 parameter
@@ -41,8 +60,6 @@ function App() {
   };
   return (
     <div className="App">
-      <LifeCycle />
-      <UnmountLifeCycle />
       <DiaryEditor onCreate={onCreate} />
       <DiaryList data={data} onDelete={onDelete} onEdit={onEdit} />
     </div>
