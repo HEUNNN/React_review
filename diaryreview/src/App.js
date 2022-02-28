@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
+import OptimizeTest from "./OptimizeTest";
 
 function App() {
   const [data, setData] = useState([]); //데이터를 관리할 state(최상단에 위치)
@@ -59,7 +60,6 @@ function App() {
     );
   };
   const getDiaryAnalysis = useMemo(() => {
-    console.log("일기 분석 시작", data);
     const goodCount = data.filter((v) => v.emotion >= 3).length;
     const badCount = data.length - goodCount;
     const goodRatio = (goodCount / data.length) * 100;
@@ -68,6 +68,7 @@ function App() {
   const { goodCount, badCount, goodRatio } = getDiaryAnalysis; // 객체로 반환되는 결괏값을 비구조화 할당으로 받는다.
   return (
     <div className="App">
+      <OptimizeTest />
       <DiaryEditor onCreate={onCreate} />
       <div>전체 일기 수: {data.length}</div>
       <div>기분 좋은 일기 수: {goodCount}</div>
