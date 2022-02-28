@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
@@ -18,7 +18,7 @@ function App() {
         author: elem.email,
         content: elem.body,
         emotion: Math.floor(Math.random() * 5) + 1,
-        created_date: new DataTransfer().getTime(),
+        created_date: new Date().getTime(),
         id: dataId.current++, //return 되니까 후위 연산자 사용
       };
     });
@@ -58,9 +58,21 @@ function App() {
       //elem.id === targetId 이면, 수정된 content로 교체된 elem을 setDate()에 전달해주어서 data 상태를 변화시킴
     );
   };
+  const getDiaryAnalysis = useMemo(() => {
+    console.log("일기 분석 시작", data);
+    const goodCount = data.filter((v) => v.emotion >= 3).length;
+    const badCount = data.length - goodCount;
+    const goodRatio = (goodCount / data.length) * 100;
+    return { goodCount, badCount, goodRatio };
+  }, [data.length]);
+  const { goodCount, badCount, goodRatio } = getDiaryAnalysis; // 객체로 반환되는 결괏값을 비구조화 할당으로 받는다.
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
+      <div>전체 일기 수: {data.length}</div>
+      <div>기분 좋은 일기 수: {goodCount}</div>
+      <div>기분 나쁜 일기 수: {badCount}</div>
+      <div>기분 좋은 일기의 비율: {goodRatio} %</div>
       <DiaryList data={data} onDelete={onDelete} onEdit={onEdit} />
     </div>
   );
