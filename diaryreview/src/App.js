@@ -44,23 +44,21 @@ function App() {
       return [newItem, ...data];
     }); //함수형 업데이트
   }, []);
-  const onDelete = (targetId) => {
-    //onDelete를 App.js에서 직접 호출하지 않기에, 지우기를 원하는 요소의 id를 받는 parameter 설정
-    //DiaryItem의 '삭제하기' 버튼을 눌렀을때 알 수 있는 해당 list 요소의 id를 onDelete targetId에 전달해주어야한다.
-    //따라서 DiaryItem의 부모 요소인 DiaryList에 onDelete를 전달 해줌 = Props Drilling
-    const newDiaryList = data.filter((it) => it.id !== targetId); //targetId에 해당하는 요소를 data에서 제거한 newDiaryList 배열 반환
-    setData(newDiaryList); //setData()를 통해 data 상태를 변경(갱신)할 수 있음
-  };
+  const onDelete = useCallback((targetId) => {
+    setData((data) => data.filter((it) => it.id !== targetId)); //setData()를 통해 data 상태를 변경(갱신)할 수 있음
+  }, []);
   //무엇을 수정할지 모르고 그저 props해주기 때문에 targetId parameter 필요
-  const onEdit = (targetId, newContent) => {
+  const onEdit = useCallback((targetId, newContent) => {
     setData(
-      data.map((elem) =>
-        elem.id === targetId ? { ...elem, content: newContent } : elem
-      )
+      (data) =>
+        data.map((elem) =>
+          elem.id === targetId ? { ...elem, content: newContent } : elem
+        )
+
       //elem.id !== targetId 이면 그냥 elem을 반환,
       //elem.id === targetId 이면, 수정된 content로 교체된 elem을 setDate()에 전달해주어서 data 상태를 변화시킴
     );
-  };
+  }, []);
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = data.filter((v) => v.emotion >= 3).length;
     const badCount = data.length - goodCount;

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 const DiaryItem = ({
   author,
@@ -12,6 +12,9 @@ const DiaryItem = ({
   //elem을 받아와서 elem은 객체라서 elem.content 등으로 사용해도 됨
   //DiaryList가 렌더링 하는 자식은 DiaryItem component 이다.
   /*가독성을 위해서 return에서 밖으로 빼내어 handleDelete 함수로 선언하여 사용*/
+  useEffect(() => {
+    console.log(`${id}(id) item is rendering. `);
+  });
   const handleDelete = () => {
     if (window.confirm(`${id}번째 일기를 정말 삭제하시겠습니까?`)) {
       onDelete(id);
@@ -87,4 +90,4 @@ const DiaryItem = ({
   );
 };
 
-export default DiaryItem;
+export default React.memo(DiaryItem);
