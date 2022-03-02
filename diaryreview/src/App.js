@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
@@ -25,10 +25,11 @@ function App() {
     setData(initData);
   };
   useEffect(() => {
+    // 처음 mount 될 때 getDate() 호출
     getData();
   }, []);
   //기존의 일기 배열에 새로운 일기를 추가하는 함수: onCreate
-  const onCreate = (author, content, emotion) => {
+  const onCreate = useCallback((author, content, emotion) => {
     //새로운 데이터를 받아올 parameter
     const created_date = new Date().getTime();
     const newItem = {
@@ -39,8 +40,10 @@ function App() {
       id: dataId.current,
     };
     dataId.current += 1; //추가될 데이터의 id 값이 1씩 증가됨
-    setData([newItem, ...data]);
-  };
+    setData((data) => {
+      return [newItem, ...data];
+    }); //함수형 업데이트
+  }, []);
   const onDelete = (targetId) => {
     //onDelete를 App.js에서 직접 호출하지 않기에, 지우기를 원하는 요소의 id를 받는 parameter 설정
     //DiaryItem의 '삭제하기' 버튼을 눌렀을때 알 수 있는 해당 list 요소의 id를 onDelete targetId에 전달해주어야한다.
