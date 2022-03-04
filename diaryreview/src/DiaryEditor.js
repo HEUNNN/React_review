@@ -1,6 +1,9 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import React from "react";
-const DiaryEditor = ({ onCreate }) => {
+import { DiaryDispatchContext } from "./App";
+const DiaryEditor = () => {
+  const { onCreate } = useContext(DiaryDispatchContext);
+
   const [state, setState] = useState({
     //useState를 사용하기 위한 선언(정의)
     author: "",

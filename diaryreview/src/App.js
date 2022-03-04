@@ -1,4 +1,4 @@
-import {
+import React, {
   useEffect,
   useRef,
   useState,
@@ -36,9 +36,10 @@ const dataReducer = (state, action) => {
       return state;
   }
 };
+export const DiaryStateContext = React.createContext(); //오직 data state 만을 위해서 존재
+export const DiaryDispatchContext = React.createContext(); //onCreate, onDelete, onEdit을 대체한 dispatch를 위해 존재
 
 function App() {
-  //const [data, setData] = useState([]); //데이터를 관리할 state(최상단에 위치)
   const [data, dispatch] = useReducer(dataReducer, []);
   const dataId = useRef(0); //id 값을 0 으로 정의(초기값)
 
@@ -90,15 +91,25 @@ function App() {
     return { goodCount, badCount, goodRatio };
   }, [data.length]);
   const { goodCount, badCount, goodRatio } = getDiaryAnalysis; // 객체로 반환되는 결괏값을 비구조화 할당으로 받는다.
+
+  //onCreate, onDelete, onEdit 등의 dispatches를 하나로 묶어서 넘겨주기
+  const memoizedDispatches = useMemo(() => {
+    return { onCreate, onDelete, onEdit };
+  }, []);
+
   return (
-    <div className="App">
-      <DiaryEditor onCreate={onCreate} />
-      <div>전체 일기 수: {data.length}</div>
-      <div>기분 좋은 일기 수: {goodCount}</div>
-      <div>기분 나쁜 일기 수: {badCount}</div>
-      <div>기분 좋은 일기의 비율: {goodRatio} %</div>
-      <DiaryList data={data} onDelete={onDelete} onEdit={onEdit} />
-    </div>
+    <DiaryStateContext.Provider value={data}>
+      <DiaryDispatchContext.Provider value={memoizedDispatches}>
+        <div className="App">
+          <DiaryEditor />
+          <div>전체 일기 수: {data.length}</div>
+          <div>기분 좋은 일기 수: {goodCount}</div>
+          <div>기분 나쁜 일기 수: {badCount}</div>
+          <div>기분 좋은 일기의 비율: {goodRatio} %</div>
+          <DiaryList />
+        </div>
+      </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
   );
 }
 

@@ -1,17 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
+import { DiaryDispatchContext } from "./App";
 
-const DiaryItem = ({
-  author,
-  content,
-  emotion,
-  created_date,
-  id,
-  onDelete,
-  onEdit,
-}) => {
+const DiaryItem = ({ author, content, emotion, created_date, id }) => {
   //elem을 받아와서 elem은 객체라서 elem.content 등으로 사용해도 됨
   //DiaryList가 렌더링 하는 자식은 DiaryItem component 이다.
   /*가독성을 위해서 return에서 밖으로 빼내어 handleDelete 함수로 선언하여 사용*/
+
+  const { onDelete, onEdit } = useContext(DiaryDispatchContext);
+
   useEffect(() => {
     console.log(`${id}(id) item is rendering. `);
   });
